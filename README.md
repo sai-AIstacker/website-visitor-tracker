@@ -26,5 +26,5 @@ A lightweight visitor analytics system built with FastAPI. This project tracks w
 
 ---
 
-## Project Structure
+
 
