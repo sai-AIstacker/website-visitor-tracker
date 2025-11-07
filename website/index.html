@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="layout">
+
+        <header class="navbar">
+            <div class="logo">Visitor Tracker</div>
+            <nav>
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </header>
+
+        <main>
+
+            <section class="hero" id="home">
+                <h1>Visitor Tracking Dashboard</h1>
+                <p>Real-time analytics of website visits</p>
+
+                <div class="glass-card stats">
+                    <h3>Total Visitors</h3>
+                    <h1 id="visitorCount">Loading...</h1>
+                </div>
+            </section>
+
+            <section class="section" id="about">
+                <h2 class="section-title">What Data We Log</h2>
+
+                <div class="grid">
+                    <div class="glass-card feature">
+                        <h3>Location</h3>
+                        <p>Country, City, Region</p>
+                    </div>
+                    <div class="glass-card feature">
+                        <h3>Device Information</h3>
+                        <p>Browser, OS & Device Type</p>
+                    </div>
+                    <div class="glass-card feature">
+                        <h3>Access Time</h3>
+                        <p>Date & Timestamp</p>
+                    </div>
+                    <div class="glass-card feature">
+                        <h3>Referrer</h3>
+                        <p>Source of the visit</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">How It Works</h2>
+
+                <div class="steps">
+                    <div class="step">
+                        <div class="number">1</div>
+                        <h4>User Visits Website</h4>
+                    </div>
+                    <div class="step">
+                        <div class="number">2</div>
+                        <h4>Data is Collected</h4>
+                    </div>
+                    <div class="step">
+                        <div class="number">3</div>
+                        <h4>Information is Stored</h4>
+                    </div>
+                </div>
+            </section>
+
+            <section class="notice">
+                <h4>Privacy Notice</h4>
+                <p>This site records analytics for demonstration purposes only.</p>
+            </section>
+
+        </main>
+
+        <footer id="contact">
+            <p>© 2024 Visitor Tracker Project | Built with Python & FastAPI</p>
+        </footer>
+
+    </div>
+
+    <script>
+        async function trackVisitor() {
+            try {
+                await fetch('/track', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        page_url: window.location.href,
+                        referrer: document.referrer || 'Direct'
+                    })
+                });
+            } catch (error) {}
+        }
+
+        async function getStats() {
+            try {
+                const res = await fetch('/stats');
+                const data = await res.json();
+                document.getElementById('visitorCount').textContent = data.total_visitors;
+            } catch {
+                document.getElementById('visitorCount').textContent = '0';
+            }
+        }
+
+        window.addEventListener('load', () => {
+            trackVisitor();
+            getStats();
+        });
+    </script>
+
+</body>
+</html>

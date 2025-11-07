@@ -1,0 +1,148 @@
+/* Core */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Inter, sans-serif;
+    background: linear-gradient(135deg, #dfe4ff 0%, #e9d9ff 100%);
+    color: #111;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Layout Wrapper */
+.layout {
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.8rem 3rem;
+    background: rgba(255,255,255,0.4);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    position: sticky;
+    top: 0;
+}
+
+.logo {
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+
+nav a {
+    margin-left: 1.8rem;
+    text-decoration: none;
+    color: #333;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+nav a:hover {
+    color: #4c57ff;
+}
+
+/* Hero */
+.hero {
+    text-align: center;
+    padding: 6rem 1rem;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+.hero p {
+    margin-top: 0.8rem;
+    color: #555;
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+    background: rgba(255,255,255,0.45);
+    border-radius: 18px;
+    padding: 2rem;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.35);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+}
+
+/* Stats Card */
+.stats {
+    margin: 3rem auto 0;
+    width: 260px;
+}
+
+/* Sections */
+.section {
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 2rem;
+    margin-bottom: 3rem;
+    font-weight: 600;
+}
+
+.grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.feature h3 {
+    font-weight: 600;
+}
+
+.feature p {
+    margin-top: 0.5rem;
+    color: #666;
+}
+
+/* Steps */
+.steps {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.step {
+    text-align: center;
+}
+
+.number {
+    width: 48px;
+    height: 48px;
+    background: rgba(100, 100, 255, 0.25);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin: auto;
+}
+
+/* Notice */
+.notice {
+    background: rgba(255,255,255,0.4);
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 2rem;
+    text-align: center;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 2rem;
+    color: #333;
+}

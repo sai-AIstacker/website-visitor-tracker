@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+env/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Local data files
+visitors_data.xlsx
+
+# Uvicorn reload artifacts
+*.pid
+
+# Byte-compiled / optimized / DLL files
+*.so
+
+# Distribution / Packaging
+build/
+dist/
+*.egg-info/
