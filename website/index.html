@@ -85,10 +85,13 @@
 
     </div>
 
+    <!--SCRIPT TO POINT TO RENDER BACKEND -->
     <script>
+        const BACKEND_URL = "https://website-visitor-tracker-n0tm.onrender.com";
+
         async function trackVisitor() {
             try {
-                await fetch('/track', {
+                await fetch(`${BACKEND_URL}/track`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -96,12 +99,14 @@
                         referrer: document.referrer || 'Direct'
                     })
                 });
-            } catch (error) {}
+            } catch (error) {
+                console.log("Tracking failed:", error);
+            }
         }
 
         async function getStats() {
             try {
-                const res = await fetch('/stats');
+                const res = await fetch(`${BACKEND_URL}/stats`);
                 const data = await res.json();
                 document.getElementById('visitorCount').textContent = data.total_visitors;
             } catch {
