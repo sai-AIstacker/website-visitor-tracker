@@ -1,12 +1,15 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from openpyxl import Workbook, load_workbook
 from datetime import datetime
 from user_agents import parse
 import os
+import json
 import requests
+import gspread
+from google.oauth2.service_account import Credentials
+
 
 app = FastAPI()
 
@@ -19,20 +22,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Excel file path
-EXCEL_FILE = 'visitors_data.xlsx'
+# GOOGLE SHEET SETUP 
 
-def init_excel():
-    """Initialize Excel file with headers if it doesn't exist."""
-    if not os.path.exists(EXCEL_FILE):
-        wb = Workbook()
-        ws = wb.active
-        ws.title = "Visitors"
-        headers = ['Timestamp', 'IP Address', 'Country', 'City', 'Region',
-                   'Browser', 'OS', 'Device', 'Referrer', 'Page URL']
-        ws.append(headers)
-        wb.save(EXCEL_FILE)
-        print(f" Created {EXCEL_FILE}")
+# Load credentials from Render environment variable
+creds_json = os.environ.get("GOOGLE_CREDS_JSON")
+creds_dict = json.loads(creds_json)
+
+scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+
+creds = Credentials.from_service_account_file(
+    "visitor-tracker-api-053b3524faf8.json",
+    scopes=scope
+)
+
+client = gspread.authorize(creds)
+
+# Google Sheet Name (Make sure same name exists in your Google Drive)
+SHEET_NAME = "VisitorTrackerData"
+sheet = client.open(SHEET_NAME).sheet1
 
 def get_location_info(ip):
     """Get location data from IP."""
@@ -52,7 +59,7 @@ def get_location_info(ip):
 
     return {'country': 'Unknown', 'city': 'Unknown', 'region': 'Unknown'}
 
-# Serve Frontend Static Files
+# Serve Frontend Files (Your HTML/CSS/JS)
 app.mount("/", StaticFiles(directory="website", html=True), name="website")
 
 @app.post("/track")
@@ -71,7 +78,7 @@ async def track_visitor(request: Request):
 
         data = await request.json()
 
-        visitor_data = [
+        row = [
             datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
             ip,
             location['country'],
@@ -84,17 +91,9 @@ async def track_visitor(request: Request):
             data.get('page_url', 'Unknown')
         ]
 
-        # Save to Excel
-        wb = load_workbook(EXCEL_FILE)
-        ws = wb.active
-        ws.append(visitor_data)
-        wb.save(EXCEL_FILE)
+        sheet.append_row(row)
 
-        return JSONResponse({
-            "status": "success",
-            "message": "Visitor tracked successfully",
-            "visitor_count": ws.max_row - 1
-        })
+        return JSONResponse({"status": "success", "message": "Visitor logged"})
 
     except Exception as e:
         print(f" Error: {str(e)}")
@@ -103,13 +102,10 @@ async def track_visitor(request: Request):
 @app.get("/stats")
 def get_stats():
     try:
-        wb = load_workbook(EXCEL_FILE)
-        ws = wb.active
-        return {"total_visitors": ws.max_row - 1}
+        total_visitors = len(sheet.get_all_values()) - 1
+        return {"total_visitors": total_visitors}
     except:
         return {"total_visitors": 0}
 
-# Initialize Excel when script starts
-init_excel()
-print("\n FastAPI Visitor Tracker Running!")
 
+print("\nFastAPI Visitor Tracker Running with Google Sheets Logging")
